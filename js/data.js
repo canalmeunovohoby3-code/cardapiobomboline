@@ -20,8 +20,7 @@
       url: 'https://www.instagram.com/sorveteriabamboline/'
     },
     whatsapp: {
-      primary: { digits: '5569993108621', display: '(69) 99310-8621' },
-      secondary: { digits: '5569993983157', display: '(69) 99398-3157' }
+      primary: { digits: '5569993522704', display: '(69) 99352-2704' }
     },
     timeZone: 'America/Porto_Velho',
     hours: {
@@ -41,7 +40,6 @@
   };
 
   const FLAVORS = [
-    { id: 'uva-nata', label: 'Uva e Nata' },
     { id: 'morango-baunilha', label: 'Morango e Baunilha' },
     { id: 'chocolate-leite-condensado', label: 'Chocolate e Leite Condensado' },
     { id: 'acai', label: 'Açaí' },
@@ -54,7 +52,7 @@
       label: 'Sorvetes tradicionais',
       shortLabel: 'Tradicionais',
       description: 'Os sabores de sempre, do copo ao milk-shake.',
-      flavorIds: ['uva-nata', 'morango-baunilha', 'chocolate-leite-condensado']
+      flavorIds: ['morango-baunilha', 'chocolate-leite-condensado']
     },
     {
       id: 'acai-leitinho',

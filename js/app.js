@@ -137,14 +137,8 @@
     document.querySelectorAll('[data-whatsapp-primary]').forEach(function (node) {
       node.setAttribute('href', 'https://wa.me/' + store.whatsapp.primary.digits);
     });
-    document.querySelectorAll('[data-whatsapp-secondary]').forEach(function (node) {
-      node.setAttribute('href', 'https://wa.me/' + store.whatsapp.secondary.digits);
-    });
     document.querySelectorAll('[data-whatsapp-primary-label]').forEach(function (node) {
       node.textContent = store.whatsapp.primary.display;
-    });
-    document.querySelectorAll('[data-whatsapp-secondary-label]').forEach(function (node) {
-      node.textContent = store.whatsapp.secondary.display;
     });
     document.querySelectorAll('[data-instagram]').forEach(function (node) {
       node.setAttribute('href', store.instagram.url);

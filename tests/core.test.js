@@ -19,7 +19,7 @@ function add(cart, productId, variantId, flavorId, qty) {
 
 function sampleCart() {
   let cart = [];
-  cart = add(cart, 'trad-copo', '300', 'uva-nata', 1);
+  cart = add(cart, 'trad-copo', '300', 'morango-baunilha', 1);
   cart = add(cart, 'coca-lata', 'unico', null, 2);
   return cart;
 }
@@ -120,11 +120,11 @@ test('cada produto tem um nome de exibição único no cardápio', function () {
 });
 
 test('adiciona sorvete tradicional de 300 ml por R$ 9,00', function () {
-  const cart = add([], 'trad-copo', '300', 'uva-nata', 1);
+  const cart = add([], 'trad-copo', '300', 'morango-baunilha', 1);
   assert.equal(cart.length, 1);
   assert.equal(cart[0].unitPrice, 900);
   assert.equal(cart[0].subtotal, 900);
-  assert.equal(cart[0].flavorLabel, 'Uva e Nata');
+  assert.equal(cart[0].flavorLabel, 'Morango e Baunilha');
   assert.equal(cart[0].variantLabel, '300 ml');
 });
 
@@ -136,15 +136,15 @@ test('adiciona açaí de 500 ml por R$ 17,00', function () {
 });
 
 test('mescla apenas itens com produto, tamanho e sabor idênticos', function () {
-  let cart = add([], 'trad-copo', '300', 'uva-nata', 1);
-  cart = add(cart, 'trad-copo', '300', 'uva-nata', 2);
-  cart = add(cart, 'trad-copo', '500', 'uva-nata', 1);
-  cart = add(cart, 'trad-copo', '300', 'morango-baunilha', 1);
+  let cart = add([], 'trad-copo', '300', 'morango-baunilha', 1);
+  cart = add(cart, 'trad-copo', '300', 'morango-baunilha', 2);
+  cart = add(cart, 'trad-copo', '500', 'morango-baunilha', 1);
+  cart = add(cart, 'trad-copo', '300', 'chocolate-leite-condensado', 1);
   assert.equal(cart.length, 3);
   assert.equal(cart[0].quantity, 3);
   assert.equal(cart[0].subtotal, 2700);
   assert.equal(cart[1].quantity, 1);
-  assert.equal(cart[2].flavorId, 'morango-baunilha');
+  assert.equal(cart[2].flavorId, 'chocolate-leite-condensado');
 });
 
 test('atualiza quantidades, limita o máximo e remove itens', function () {
@@ -166,7 +166,7 @@ test('reidrata o carrinho pelos preços cadastrados ignorando valores adulterado
     {
       productId: 'trad-copo',
       variantId: '300',
-      flavorId: 'uva-nata',
+      flavorId: 'morango-baunilha',
       qty: 3,
       unitPrice: 1,
       subtotal: 3
@@ -174,7 +174,7 @@ test('reidrata o carrinho pelos preços cadastrados ignorando valores adulterado
     {
       productId: 'produto-inexistente',
       variantId: '300',
-      flavorId: 'uva-nata',
+      flavorId: 'morango-baunilha',
       qty: 1
     }
   ]);
@@ -184,7 +184,12 @@ test('reidrata o carrinho pelos preços cadastrados ignorando valores adulterado
   assert.equal(normalized[0].subtotal, 2700);
 });
 
-test('rejeita sabor que não pertence à categoria', function () {
+test('não exibe mais o sabor Uva e Nata e rejeita sabores removidos', function () {
+  assert.equal(data.flavorMap['uva-nata'], undefined);
+  assert.equal(data.categoryMap.tradicionais.flavorIds.indexOf('uva-nata'), -1);
+  assert.throws(function () {
+    add([], 'trad-copo', '300', 'uva-nata', 1);
+  }, /Produto inválido/);
   assert.throws(function () {
     add([], 'trad-copo', '300', 'acai', 1);
   }, /Produto inválido/);
@@ -209,7 +214,7 @@ test('mantém o limite de sabores explícito e configurado por produto', functio
     core.addToCart([], {
       productId: 'trad-milkshake',
       variantId: '500',
-      flavorIds: ['uva-nata', 'morango-baunilha'],
+      flavorIds: ['morango-baunilha', 'chocolate-leite-condensado'],
       qty: 1
     });
   }, /Produto inválido/);
@@ -223,31 +228,40 @@ test('suporta combinação de sabores quando o produto permite', function () {
     const cart = core.addToCart([], {
       productId: 'trad-milkshake',
       variantId: '500',
-      flavorIds: ['morango-baunilha', 'uva-nata'],
+      flavorIds: ['chocolate-leite-condensado', 'morango-baunilha'],
       qty: 1
     }).cart;
-    assert.deepEqual(cart[0].flavorIds, ['uva-nata', 'morango-baunilha']);
-    assert.equal(cart[0].flavorLabel, 'Uva e Nata + Morango e Baunilha');
-    assert.match(cart[0].key, /uva-nata\+morango-baunilha/);
+    assert.deepEqual(cart[0].flavorIds, ['morango-baunilha', 'chocolate-leite-condensado']);
+    assert.equal(cart[0].flavorLabel, 'Morango e Baunilha + Chocolate e Leite Condensado');
+    assert.match(cart[0].key, /morango-baunilha\+chocolate-leite-condensado/);
     const message = core.buildWhatsAppMessage(validOrder({ cart: cart }));
-    assert.match(message, /Sabores: Uva e Nata \+ Morango e Baunilha/);
+    assert.match(message, /Sabores: Morango e Baunilha \+ Chocolate e Leite Condensado/);
     assert.match(message, /Valor unitário: R\$ 15,00/);
 
-    const differentCombination = core.addToCart(cart, {
+    const sameCombination = core.addToCart(cart, {
       productId: 'trad-milkshake',
       variantId: '500',
-      flavorIds: ['uva-nata', 'chocolate-leite-condensado'],
+      flavorIds: ['morango-baunilha', 'chocolate-leite-condensado'],
       qty: 1
     }).cart;
-    assert.equal(differentCombination.length, 2);
+    assert.equal(sameCombination.length, 1);
+    assert.equal(sameCombination[0].quantity, 2);
+
+    const differentSize = core.addToCart(cart, {
+      productId: 'trad-milkshake',
+      variantId: '700',
+      flavorIds: ['morango-baunilha', 'chocolate-leite-condensado'],
+      qty: 1
+    }).cart;
+    assert.equal(differentSize.length, 2);
 
     const repeatedFlavor = core.addToCart([], {
       productId: 'trad-milkshake',
       variantId: '500',
-      flavorIds: ['uva-nata', 'uva-nata'],
+      flavorIds: ['morango-baunilha', 'morango-baunilha'],
       qty: 1
     }).cart;
-    assert.deepEqual(repeatedFlavor[0].flavorIds, ['uva-nata']);
+    assert.deepEqual(repeatedFlavor[0].flavorIds, ['morango-baunilha']);
   } finally {
     product.maxFlavors = originalLimit;
   }
@@ -328,7 +342,7 @@ test('gera mensagem completa do WhatsApp com endereço, itens, taxa e total', fu
   assert.match(message, /\*Complemento:\* Casa 2/);
   assert.match(message, /\*Referência:\* Perto da praça/);
   assert.match(message, /1x Copo de sorvete — 300 ml/);
-  assert.match(message, /Sabor: Uva e Nata/);
+  assert.match(message, /Sabor: Morango e Baunilha/);
   assert.match(message, /Valor unitário: R\$ 9,00/);
   assert.match(message, /2x Coca-Cola lata/);
   assert.match(message, /Valor unitário: R\$ 5,00/);
@@ -359,7 +373,8 @@ test('codifica a mensagem e usa o WhatsApp principal em formato internacional', 
   const order = validOrder();
   const message = core.buildWhatsAppMessage(order);
   const url = core.buildOrderUrl(order);
-  assert.match(url, /^https:\/\/wa\.me\/5569993108621\?text=/);
+  assert.equal(data.store.whatsapp.primary.digits, '5569993522704');
+  assert.match(url, /^https:\/\/wa\.me\/5569993522704\?text=/);
   assert.doesNotMatch(url.split('?')[0], /[\s()+-]/);
   const encoded = url.split('?text=')[1];
   assert.equal(decodeURIComponent(encoded), message);
@@ -382,7 +397,7 @@ test('valida carrinho, setor, nome e telefone antes de gerar a mensagem', functi
 });
 
 test('formata telefone brasileiro com DDD', function () {
-  assert.equal(core.formatPhoneInput('69993108621'), '(69) 99310-8621');
+  assert.equal(core.formatPhoneInput('69993522704'), '(69) 99352-2704');
   assert.equal(core.formatPhoneInput('6933334444'), '(69) 3333-4444');
   assert.equal(core.formatPhoneInput('69'), '(69');
 });
