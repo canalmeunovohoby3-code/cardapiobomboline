@@ -86,8 +86,11 @@
     if (!variant || !Number.isInteger(variant.price) || variant.price < 0) {
       return null;
     }
+    const allowedFlavorIds = Array.isArray(product.flavorIds) && product.flavorIds.length > 0
+      ? product.flavorIds
+      : category.flavorIds;
     let flavors = [];
-    if (category.flavorIds.length > 0) {
+    if (allowedFlavorIds.length > 0) {
       const requested = Array.isArray(input.flavorIds)
         ? input.flavorIds
         : (input.flavorId ? [input.flavorId] : []);
@@ -103,13 +106,13 @@
       }
       flavors = unique.map(findFlavor);
       const valid = flavors.every(function (flavor) {
-        return flavor && category.flavorIds.indexOf(flavor.id) !== -1;
+        return flavor && allowedFlavorIds.indexOf(flavor.id) !== -1;
       });
       if (!valid) {
         return null;
       }
       flavors.sort(function (first, second) {
-        return category.flavorIds.indexOf(first.id) - category.flavorIds.indexOf(second.id);
+        return allowedFlavorIds.indexOf(first.id) - allowedFlavorIds.indexOf(second.id);
       });
     }
     const flavorIds = flavors.map(function (flavor) {

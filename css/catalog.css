@@ -443,6 +443,8 @@ body {
 
 .catalog-card[data-card-product="acai-copo"] .catalog-card__media img.product-art,
 .catalog-card[data-card-product="trad-casquinha"] .catalog-card__media img.product-art,
+.catalog-card[data-card-product="pote-1l"] .catalog-card__media img.product-art,
+.catalog-card[data-card-product="pote-1-5l"] .catalog-card__media img.product-art,
 .catalog-card[data-card-product="agua"] .catalog-card__media img.product-art,
 .catalog-card[data-card-product="agua-gas"] .catalog-card__media img.product-art,
 .catalog-card[data-card-product="coca-lata"] .catalog-card__media img.product-art,

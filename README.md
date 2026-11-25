@@ -26,7 +26,9 @@ Os testes verificam tabela de preços, sabores, taxas de entrega, soma do carrin
 
 ## Exibição atual do cardápio
 
-No cardápio estão visíveis apenas **Copo de sorvete**, **Milk-shake** e as **Bebidas** (sem Bananinha). Taça, Casquinha, Cascão, Bananinha e toda a linha Açaí/Leitinho estão ocultos da exibição, mas continuam preservados nos dados, no carrinho e no checkout.
+No cardápio estão visíveis o **Copo de sorvete**, os potes de **1 litro** e **1,5 litro**, o **Milk-shake** e as **Bebidas** (sem Bananinha). Taça, Casquinha, Cascão, Bananinha e toda a linha Açaí/Leitinho estão ocultos da exibição, mas continuam preservados nos dados, no carrinho e no checkout.
+
+Os potes oferecem **Morango e Leite Condensado** ou **Morango e Baunilha**. O limite de sabores continua configurável por produto em `maxFlavors`.
 
 A lista do que aparece no menu fica em `HIDDEN_FROM_MENU`, no início de `js/app.js`. Categorias sem produtos visíveis são ocultadas automaticamente.
 
@@ -62,6 +64,8 @@ O WhatsApp principal fica em `js/data.js`, em `store.whatsapp.primary.digits`, n
 O avatar circular do cabeçalho usa `assets/avatar-bamboline.jpg`, um recorte de `fotoprincipal.jpg`. Para trocar a imagem do topo, substitua `assets/avatar-bamboline.jpg` por outra foto quadrada ou gere um novo recorte a partir da foto original.
 
 O **Copo de sorvete** exibe as fotos `assets/copo-sorvete-1.jpg` e `assets/copo-sorvete-2.jpg` lado a lado no mesmo card, criadas a partir dos arquivos `copo` e `copo2`. O **Milk-shake** usa o mesmo formato com `assets/milkshake-1.jpg` e `assets/milkshake-2.jpg`, a partir de `mikeshake.jpeg` e `mikeshake2.jpeg`.
+
+Os potes usam `assets/pote-1l-produto.jpg` e `assets/pote-1-5l-produto.jpg`, a partir de `llitro.jpeg` e `1litroemeio.jpeg`.
 
 Os demais produtos com foto são: **Taça**, **Casquinha** e **Cascão** tradicionais (`assets/taca-produto.jpg`, `assets/casquinha-produto.jpg`, `assets/cascao-produto.jpg`), **Copo de açaí e leitinho** (`assets/acai-leitinho-produto.jpg`), **Taça de açaí e leitinho** (`assets/acai-taca-produto.jpg`), **Água** (`assets/agua-produto.jpg`, a partir de `agua.png`), **Água com gás** (`assets/agua-com-gas-produto.jpg`, a partir de `aguacomgas.png`), **Coca-Cola lata** (`assets/coca-lata-produto.jpg`, a partir de `cocalata.png`), **Coca-Cola 600 ml** (`assets/coca-600-produto.jpg`, a partir de `coca600ml.png`), **Coca-Cola 1 litro** (`assets/coca-1l-produto.jpg`, a partir de `coca1litro.png`) e **Coca-Cola 2 litros** (`assets/coca-2l-produto.jpg`, a partir de `coca2litros.png`). Itens sem foto usam ilustrações SVG locais. Para usar fotos reais em outros itens, adicione ao produto em `js/data.js`:
 

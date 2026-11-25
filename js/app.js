@@ -214,13 +214,20 @@
     }) || MENU_GROUPS[0];
   }
 
+  function productFlavorIds(product, category) {
+    if (product && Array.isArray(product.flavorIds) && product.flavorIds.length > 0) {
+      return product.flavorIds;
+    }
+    return category && Array.isArray(category.flavorIds) ? category.flavorIds : [];
+  }
+
   function searchTextFor(product) {
     if (searchIndex.has(product.id)) {
       return searchIndex.get(product.id);
     }
     const category = getCategory(product);
     const group = groupById(productGroupId(product));
-    const flavorLabels = category.flavorIds.map(function (flavorId) {
+    const flavorLabels = productFlavorIds(product, category).map(function (flavorId) {
       return data.flavorMap[flavorId].label;
     });
     const variantLabels = product.variants.map(function (variant) {
@@ -260,14 +267,15 @@
 
   function previewFlavorFor(product) {
     const category = getCategory(product);
-    if (!category.flavorIds.length) {
+    const flavorIds = productFlavorIds(product, category);
+    if (!flavorIds.length) {
       return null;
     }
     let total = 0;
     for (let index = 0; index < product.id.length; index += 1) {
       total += product.id.charCodeAt(index);
     }
-    return category.flavorIds[total % category.flavorIds.length];
+    return flavorIds[total % flavorIds.length];
   }
 
   function cardTag(product) {
@@ -282,9 +290,10 @@
 
   function cardMeta(product) {
     const category = getCategory(product);
+    const flavorCount = productFlavorIds(product, category).length;
     const parts = [];
-    if (category.flavorIds.length) {
-      parts.push(category.flavorIds.length + (category.flavorIds.length === 1 ? ' sabor' : ' sabores'));
+    if (flavorCount) {
+      parts.push(flavorCount + (flavorCount === 1 ? ' sabor' : ' sabores'));
     }
     if (product.variants.length > 1) {
       parts.push(product.variants.length + ' tamanhos');
@@ -294,7 +303,7 @@
 
   function isQuickAdd(product) {
     const category = getCategory(product);
-    return Boolean(category) && category.flavorIds.length === 0 && product.variants.length === 1;
+    return Boolean(category) && productFlavorIds(product, category).length === 0 && product.variants.length === 1;
   }
 
   function cardArt(product, previewFlavor) {
@@ -523,10 +532,14 @@
   }
 
   function flavorLimit(product, category) {
-    if (!product || !category || category.flavorIds.length === 0) {
+    if (!product || !category) {
       return 0;
     }
-    return Math.max(1, Math.min(Number(product.maxFlavors) || 1, category.flavorIds.length));
+    const flavorCount = productFlavorIds(product, category).length;
+    if (flavorCount === 0) {
+      return 0;
+    }
+    return Math.max(1, Math.min(Number(product.maxFlavors) || 1, flavorCount));
   }
 
   function paintProductMedia() {
@@ -579,7 +592,7 @@
     }
     const category = getCategory(product);
     const variant = selectedVariant();
-    const needsFlavor = category.flavorIds.length > 0;
+    const needsFlavor = productFlavorIds(product, category).length > 0;
     const needsSize = product.variants.length > 1;
     const maxFlavors = flavorLimit(product, category);
     const selectedCount = state.product.flavorIds.length;
@@ -605,7 +618,7 @@
   function renderFlavorChoices(product, category) {
     const maxFlavors = flavorLimit(product, category);
     const inputType = maxFlavors > 1 ? 'checkbox' : 'radio';
-    el.pdFlavorOptions.innerHTML = category.flavorIds.map(function (flavorId) {
+    el.pdFlavorOptions.innerHTML = productFlavorIds(product, category).map(function (flavorId) {
       const flavor = data.flavorMap[flavorId];
       return [
         '<label class="choice choice--flavor" style="--swatch:' + art.getFlavorSwatch(flavorId) + '">',
@@ -645,7 +658,7 @@
     el.pdCategory.textContent = category.label;
     el.pdTitle.textContent = product.fullName;
     el.pdDescription.textContent = product.description;
-    el.pdFlavors.hidden = category.flavorIds.length === 0;
+    el.pdFlavors.hidden = productFlavorIds(product, category).length === 0;
     el.pdSizes.hidden = product.variants.length <= 1;
     renderFlavorChoices(product, category);
     renderSizeChoices(product);
@@ -664,7 +677,7 @@
     }
     const category = getCategory(product);
     const variant = selectedVariant();
-    if (category.flavorIds.length > 0 && state.product.flavorIds.length === 0) {
+    if (productFlavorIds(product, category).length > 0 && state.product.flavorIds.length === 0) {
       return;
     }
     if (!variant) {

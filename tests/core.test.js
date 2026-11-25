@@ -98,12 +98,37 @@ test('mantém os preços das bebidas exatamente como cadastrados', function () {
   assert.equal(data.productMap.bananinha.variants[0].price, 300);
 });
 
+test('cadastra os potes de 1 litro e 1,5 litro com seus sabores', function () {
+  const pot1 = data.productMap['pote-1l'];
+  const pot15 = data.productMap['pote-1-5l'];
+  assert.equal(pot1.fullName, 'Pote 1 litro');
+  assert.equal(pot1.variants[0].price, 3000);
+  assert.equal(pot15.fullName, 'Pote 1,5 litro');
+  assert.equal(pot15.variants[0].price, 3500);
+  assert.deepEqual(pot1.flavorIds, ['morango-leite-condensado', 'morango-baunilha']);
+  assert.deepEqual(pot15.flavorIds, ['morango-leite-condensado', 'morango-baunilha']);
+
+  const cart1 = add([], 'pote-1l', 'unico', 'morango-leite-condensado', 1);
+  assert.equal(cart1[0].unitPrice, 3000);
+  assert.equal(cart1[0].flavorLabel, 'Morango e Leite Condensado');
+  assert.equal(cart1[0].orderName, 'Pote de 1 litro');
+
+  const cart15 = add([], 'pote-1-5l', 'unico', 'morango-baunilha', 1);
+  assert.equal(cart15[0].unitPrice, 3500);
+  assert.equal(cart15[0].flavorLabel, 'Morango e Baunilha');
+  assert.equal(cart15[0].orderName, 'Pote de 1,5 litro');
+
+  assert.throws(function () {
+    add([], 'pote-1l', 'unico', 'chocolate-leite-condensado', 1);
+  }, /Produto inválido/);
+});
+
 test('organiza todos os produtos nas três categorias', function () {
   assert.equal(data.categories.length, 3);
-  assert.equal(data.products.length, 17);
+  assert.equal(data.products.length, 19);
   assert.equal(data.products.filter(function (product) {
     return product.categoryId === 'tradicionais';
-  }).length, 5);
+  }).length, 7);
   assert.equal(data.products.filter(function (product) {
     return product.categoryId === 'acai-leitinho';
   }).length, 5);

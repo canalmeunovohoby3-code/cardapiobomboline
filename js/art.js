@@ -22,6 +22,14 @@
       accent: '#C13D66',
       swatch: 'linear-gradient(135deg, #E15C86 0 52%, #FFF3DA 52% 100%)'
     },
+    'morango-leite-condensado': {
+      bg: '#FFE9EF',
+      bg2: '#F9D7DF',
+      primary: '#DD5A80',
+      secondary: '#F6DFB7',
+      accent: '#B8365A',
+      swatch: 'linear-gradient(135deg, #DD5A80 0 52%, #F6DFB7 52% 100%)'
+    },
     'chocolate-leite-condensado': {
       bg: '#F4E5D9',
       bg2: '#EAD3C0',
