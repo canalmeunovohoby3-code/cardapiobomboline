@@ -28,7 +28,7 @@ Os testes verificam tabela de preços, sabores, taxas de entrega, soma do carrin
 
 No cardápio estão visíveis o **Copo de sorvete**, os potes de **1 litro** e **1,5 litro**, o **Milk-shake** e as **Bebidas** (sem Bananinha). Taça, Casquinha, Cascão, Bananinha e toda a linha Açaí/Leitinho estão ocultos da exibição, mas continuam preservados nos dados, no carrinho e no checkout.
 
-Os potes oferecem **Morango e Leite Condensado** ou **Morango e Baunilha**. O limite de sabores continua configurável por produto em `maxFlavors`.
+Os potes oferecem **Morango e Baunilha** e **Chocolate e Leite Condensado**. O cliente pode escolher uma opção ou as duas, totalizando até quatro sabores no pote.
 
 A lista do que aparece no menu fica em `HIDDEN_FROM_MENU`, no início de `js/app.js`. Categorias sem produtos visíveis são ocultadas automaticamente.
 
@@ -36,11 +36,11 @@ A lista do que aparece no menu fica em `HIDDEN_FROM_MENU`, no início de `js/app
 
 Cada produto aparece uma única vez no cardápio. Tamanhos e sabores são escolhidos no painel de personalização, e os cards usam o nome completo do produto para diferenciar as linhas tradicional e açaí/leitinho.
 
-O limite de sabores é individual e fica no campo `maxFlavors` de cada produto em `js/data.js`. Todos os produtos com sabor estão configurados atualmente com **1 sabor**, preservando a regra existente. O seletor, o carrinho, o `localStorage` e a mensagem do WhatsApp já suportam múltiplos sabores quando esse valor for maior que 1.
+O limite de sabores é individual e fica no campo `maxFlavors` de cada produto em `js/data.js`. Os potes estão configurados com **2 opções de sabor**; os demais produtos, com **1 sabor**. O seletor, o carrinho, o `localStorage` e a mensagem do WhatsApp já suportam múltiplos sabores quando esse valor for maior que 1.
 
 **A confirmar com a loja:**
 
-- Quantidade máxima de sabores por produto (copos, taças, casquinhas, cascões e milk-shakes).
+- Quantidade máxima de sabores dos demais produtos (copos, taças, casquinhas, cascões e milk-shakes).
 - Se combinações podem misturar sabores tradicionais com açaí/leitinho. Hoje cada categoria mantém seus próprios sabores.
 - Se combinações de sabores terão algum acréscimo de preço. Nenhuma cobrança adicional foi criada; o preço continua sendo definido apenas pelo produto e tamanho.
 
