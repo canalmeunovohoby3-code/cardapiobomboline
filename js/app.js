@@ -291,9 +291,12 @@
   function cardMeta(product) {
     const category = getCategory(product);
     const flavorCount = productFlavorIds(product, category).length;
+    const maxFlavors = Number(product.maxFlavors) || 1;
     const parts = [];
     if (flavorCount) {
-      parts.push(flavorCount + (flavorCount === 1 ? ' sabor' : ' sabores'));
+      parts.push(maxFlavors > 1
+        ? 'Escolha 1 ou ' + Math.min(maxFlavors, flavorCount) + ' sabores'
+        : flavorCount + (flavorCount === 1 ? ' sabor' : ' sabores'));
     }
     if (product.variants.length > 1) {
       parts.push(product.variants.length + ' tamanhos');
@@ -597,7 +600,7 @@
     const maxFlavors = flavorLimit(product, category);
     const selectedCount = state.product.flavorIds.length;
     const canAdd = (!needsFlavor || selectedCount > 0) && (!needsSize || Boolean(variant));
-    el.pdFlavorsHeading.textContent = maxFlavors > 1 ? 'Escolha até ' + maxFlavors + ' sabores' : 'Escolha o sabor';
+    el.pdFlavorsHeading.textContent = maxFlavors > 1 ? 'Escolha 1 ou ' + maxFlavors + ' sabores' : 'Escolha o sabor';
     el.pdQuantityValue.textContent = state.product.quantity;
     el.pdMinus.disabled = state.product.quantity <= 1;
     el.pdPlus.disabled = state.product.quantity >= data.maxQuantity;
