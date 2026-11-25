@@ -42,6 +42,10 @@
   const FLAVORS = [
     { id: 'morango-baunilha', label: 'Morango e Baunilha' },
     { id: 'chocolate-leite-condensado', label: 'Chocolate e Leite Condensado' },
+    { id: 'morango', label: 'Morango' },
+    { id: 'baunilha', label: 'Baunilha' },
+    { id: 'chocolate', label: 'Chocolate' },
+    { id: 'leite-condensado', label: 'Leite Condensado' },
     { id: 'acai', label: 'Açaí' },
     { id: 'leitinho', label: 'Leitinho' }
   ];
@@ -123,8 +127,9 @@
       orderName: 'Pote de 1 litro',
       description: 'Pote de 1 litro com os sabores que você escolher.',
       art: 'pote',
-      maxFlavors: 2,
-      flavorIds: ['morango-baunilha', 'chocolate-leite-condensado'],
+      minFlavors: 2,
+      maxFlavors: 4,
+      flavorIds: ['morango', 'baunilha', 'chocolate', 'leite-condensado'],
       image: 'assets/pote-1l-produto.jpg',
       imageAlt: 'Pote de sorvete de 1 litro com morango, leite condensado e baunilha',
       variants: [{ id: 'unico', label: null, price: 3000 }]
@@ -137,8 +142,9 @@
       orderName: 'Pote de 1,5 litro',
       description: 'Pote de 1 litro e meio com os sabores que você escolher.',
       art: 'pote',
-      maxFlavors: 2,
-      flavorIds: ['morango-baunilha', 'chocolate-leite-condensado'],
+      minFlavors: 2,
+      maxFlavors: 4,
+      flavorIds: ['morango', 'baunilha', 'chocolate', 'leite-condensado'],
       image: 'assets/pote-1-5l-produto.jpg',
       imageAlt: 'Pote de sorvete de 1 litro e meio com sabores variados',
       variants: [{ id: 'unico', label: null, price: 3500 }]

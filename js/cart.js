@@ -100,8 +100,9 @@
           unique.push(flavorId);
         }
       });
-      const maxFlavors = Math.max(1, Math.floor(Number(product.maxFlavors) || 1));
-      if (unique.length === 0 || unique.length > maxFlavors) {
+      const minFlavors = Math.max(1, Math.floor(Number(product.minFlavors) || 1));
+      const maxFlavors = Math.max(minFlavors, Math.floor(Number(product.maxFlavors) || 1));
+      if (unique.length < minFlavors || unique.length > maxFlavors) {
         return null;
       }
       flavors = unique.map(findFlavor);

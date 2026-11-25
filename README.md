@@ -28,7 +28,7 @@ Os testes verificam tabela de preços, sabores, taxas de entrega, soma do carrin
 
 No cardápio estão visíveis o **Copo de sorvete**, os potes de **1 litro** e **1,5 litro**, o **Milk-shake** e as **Bebidas** (sem Bananinha). Taça, Casquinha, Cascão, Bananinha e toda a linha Açaí/Leitinho estão ocultos da exibição, mas continuam preservados nos dados, no carrinho e no checkout.
 
-Os potes oferecem **Morango e Baunilha** e **Chocolate e Leite Condensado**. O cliente pode escolher uma opção ou as duas, totalizando até quatro sabores no pote.
+Os potes oferecem quatro sabores independentes: **Morango**, **Baunilha**, **Chocolate** e **Leite Condensado**. O cliente deve escolher de 2 a 4 sabores.
 
 A lista do que aparece no menu fica em `HIDDEN_FROM_MENU`, no início de `js/app.js`. Categorias sem produtos visíveis são ocultadas automaticamente.
 
@@ -36,7 +36,7 @@ A lista do que aparece no menu fica em `HIDDEN_FROM_MENU`, no início de `js/app
 
 Cada produto aparece uma única vez no cardápio. Tamanhos e sabores são escolhidos no painel de personalização, e os cards usam o nome completo do produto para diferenciar as linhas tradicional e açaí/leitinho.
 
-O limite de sabores é individual e fica no campo `maxFlavors` de cada produto em `js/data.js`. Os potes estão configurados com **2 opções de sabor**; os demais produtos, com **1 sabor**. O seletor, o carrinho, o `localStorage` e a mensagem do WhatsApp já suportam múltiplos sabores quando esse valor for maior que 1.
+O limite de sabores é individual e fica nos campos `minFlavors` e `maxFlavors` de cada produto em `js/data.js`. Os potes estão configurados com **mínimo de 2 e máximo de 4 sabores**; os demais produtos, com **1 sabor**. O seletor, o carrinho, o `localStorage` e a mensagem do WhatsApp suportam múltiplos sabores.
 
 **A confirmar com a loja:**
 

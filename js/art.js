@@ -30,6 +30,38 @@
       accent: '#593321',
       swatch: 'linear-gradient(135deg, #78472F 0 52%, #EFCE9D 52% 100%)'
     },
+    morango: {
+      bg: '#FFE7EE',
+      bg2: '#FFD2DF',
+      primary: '#E14B7C',
+      secondary: '#FFF2D8',
+      accent: '#B82F5D',
+      swatch: 'linear-gradient(135deg, #E14B7C 0 52%, #FFF2D8 52% 100%)'
+    },
+    baunilha: {
+      bg: '#FFF6DD',
+      bg2: '#F5E6BB',
+      primary: '#EAD4A0',
+      secondary: '#FFFCF2',
+      accent: '#B99B5C',
+      swatch: 'linear-gradient(135deg, #EAD4A0 0 52%, #FFFCF2 52% 100%)'
+    },
+    chocolate: {
+      bg: '#F2E2D3',
+      bg2: '#E4CDB6',
+      primary: '#5F3A28',
+      secondary: '#C98E5B',
+      accent: '#432518',
+      swatch: 'linear-gradient(135deg, #5F3A28 0 52%, #C98E5B 52% 100%)'
+    },
+    'leite-condensado': {
+      bg: '#FFF2DA',
+      bg2: '#F5E0B8',
+      primary: '#D8B47A',
+      secondary: '#FFF9EA',
+      accent: '#A57B42',
+      swatch: 'linear-gradient(135deg, #D8B47A 0 52%, #FFF9EA 52% 100%)'
+    },
     acai: {
       bg: '#EFE2F6',
       bg2: '#DFC9EF',

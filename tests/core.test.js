@@ -105,31 +105,46 @@ test('cadastra os potes de 1 litro e 1,5 litro com seus sabores', function () {
   assert.equal(pot1.variants[0].price, 3000);
   assert.equal(pot15.fullName, 'Pote 1,5 litro');
   assert.equal(pot15.variants[0].price, 3500);
-  assert.equal(pot1.maxFlavors, 2);
-  assert.equal(pot15.maxFlavors, 2);
-  assert.deepEqual(pot1.flavorIds, ['morango-baunilha', 'chocolate-leite-condensado']);
-  assert.deepEqual(pot15.flavorIds, ['morango-baunilha', 'chocolate-leite-condensado']);
+  assert.equal(pot1.minFlavors, 2);
+  assert.equal(pot1.maxFlavors, 4);
+  assert.equal(pot15.minFlavors, 2);
+  assert.equal(pot15.maxFlavors, 4);
+  assert.deepEqual(pot1.flavorIds, ['morango', 'baunilha', 'chocolate', 'leite-condensado']);
+  assert.deepEqual(pot15.flavorIds, ['morango', 'baunilha', 'chocolate', 'leite-condensado']);
 
-  const cart1 = add([], 'pote-1l', 'unico', 'morango-baunilha', 1);
+  const cart1 = core.addToCart([], {
+    productId: 'pote-1l',
+    variantId: 'unico',
+    flavorIds: ['morango', 'baunilha'],
+    qty: 1
+  }).cart;
   assert.equal(cart1[0].unitPrice, 3000);
-  assert.equal(cart1[0].flavorLabel, 'Morango e Baunilha');
+  assert.equal(cart1[0].flavorLabel, 'Morango + Baunilha');
   assert.equal(cart1[0].orderName, 'Pote de 1 litro');
 
   const cart15 = core.addToCart([], {
     productId: 'pote-1-5l',
     variantId: 'unico',
-    flavorIds: ['morango-baunilha', 'chocolate-leite-condensado'],
+    flavorIds: ['leite-condensado', 'chocolate', 'baunilha', 'morango'],
     qty: 1
   }).cart;
   assert.equal(cart15[0].unitPrice, 3500);
-  assert.deepEqual(cart15[0].flavorIds, ['morango-baunilha', 'chocolate-leite-condensado']);
-  assert.equal(cart15[0].flavorLabel, 'Morango e Baunilha + Chocolate e Leite Condensado');
+  assert.deepEqual(cart15[0].flavorIds, ['morango', 'baunilha', 'chocolate', 'leite-condensado']);
+  assert.equal(cart15[0].flavorLabel, 'Morango + Baunilha + Chocolate + Leite Condensado');
   assert.equal(cart15[0].orderName, 'Pote de 1,5 litro');
   const message = core.buildWhatsAppMessage(validOrder({ cart: cart15 }));
-  assert.match(message, /Sabores: Morango e Baunilha \+ Chocolate e Leite Condensado/);
+  assert.match(message, /Sabores: Morango \+ Baunilha \+ Chocolate \+ Leite Condensado/);
 
   assert.throws(function () {
-    add([], 'pote-1l', 'unico', 'acai', 1);
+    add([], 'pote-1l', 'unico', 'morango', 1);
+  }, /Produto inválido/);
+  assert.throws(function () {
+    core.addToCart([], {
+      productId: 'pote-1l',
+      variantId: 'unico',
+      flavorIds: ['morango', 'acai'],
+      qty: 1
+    });
   }, /Produto inválido/);
 });
 

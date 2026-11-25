@@ -291,11 +291,12 @@
   function cardMeta(product) {
     const category = getCategory(product);
     const flavorCount = productFlavorIds(product, category).length;
-    const maxFlavors = Number(product.maxFlavors) || 1;
+    const minFlavors = flavorMinimum(product, category);
+    const maxFlavors = flavorLimit(product, category);
     const parts = [];
     if (flavorCount) {
       parts.push(maxFlavors > 1
-        ? 'Escolha 1 ou ' + Math.min(maxFlavors, flavorCount) + ' sabores'
+        ? 'Escolha ' + minFlavors + ' a ' + maxFlavors + ' sabores'
         : flavorCount + (flavorCount === 1 ? ' sabor' : ' sabores'));
     }
     if (product.variants.length > 1) {
@@ -545,6 +546,17 @@
     return Math.max(1, Math.min(Number(product.maxFlavors) || 1, flavorCount));
   }
 
+  function flavorMinimum(product, category) {
+    if (!product || !category) {
+      return 0;
+    }
+    const flavorCount = productFlavorIds(product, category).length;
+    if (flavorCount === 0) {
+      return 0;
+    }
+    return Math.max(1, Math.min(Number(product.minFlavors) || 1, flavorCount));
+  }
+
   function paintProductMedia() {
     if (!state.product) {
       return;
@@ -569,6 +581,7 @@
     if (!product || !category) {
       return;
     }
+    const minFlavors = flavorMinimum(product, category);
     const maxFlavors = flavorLimit(product, category);
     const selectedCount = state.product.flavorIds.length;
     el.pdFlavorOptions.querySelectorAll('input[name="pd-flavor"]').forEach(function (input) {
@@ -578,7 +591,7 @@
     });
     if (maxFlavors > 1) {
       el.pdFlavorCounter.hidden = false;
-      el.pdFlavorCounter.textContent = selectedCount + ' de ' + maxFlavors + ' sabores selecionados';
+      el.pdFlavorCounter.textContent = selectedCount + ' de ' + maxFlavors + ' sabores selecionados' + (minFlavors > 1 ? ' · mínimo ' + minFlavors : '');
     } else {
       el.pdFlavorCounter.hidden = true;
       el.pdFlavorCounter.textContent = '';
@@ -597,24 +610,27 @@
     const variant = selectedVariant();
     const needsFlavor = productFlavorIds(product, category).length > 0;
     const needsSize = product.variants.length > 1;
+    const minFlavors = flavorMinimum(product, category);
     const maxFlavors = flavorLimit(product, category);
     const selectedCount = state.product.flavorIds.length;
-    const canAdd = (!needsFlavor || selectedCount > 0) && (!needsSize || Boolean(variant));
-    el.pdFlavorsHeading.textContent = maxFlavors > 1 ? 'Escolha 1 ou ' + maxFlavors + ' sabores' : 'Escolha o sabor';
+    const canAdd = (!needsFlavor || selectedCount >= minFlavors) && (!needsSize || Boolean(variant));
+    el.pdFlavorsHeading.textContent = maxFlavors > 1
+      ? (minFlavors > 1 ? 'Escolha ' + minFlavors + ' a ' + maxFlavors + ' sabores' : 'Escolha 1 ou ' + maxFlavors + ' sabores')
+      : 'Escolha o sabor';
     el.pdQuantityValue.textContent = state.product.quantity;
     el.pdMinus.disabled = state.product.quantity <= 1;
     el.pdPlus.disabled = state.product.quantity >= data.maxQuantity;
     el.pdTotal.textContent = variant ? currency(variant.price * state.product.quantity) : '—';
     el.pdAdd.disabled = !canAdd;
     syncFlavorChoices();
-    if (!needsFlavor || selectedCount > 0) {
+    if (!needsFlavor || selectedCount >= minFlavors) {
       if (!needsSize || variant) {
         el.pdAdd.textContent = 'Adicionar · ' + currency(variant.price * state.product.quantity);
       } else {
         el.pdAdd.textContent = 'Escolha o tamanho';
       }
     } else {
-      el.pdAdd.textContent = 'Escolha o sabor';
+      el.pdAdd.textContent = minFlavors > 1 ? 'Escolha ao menos ' + minFlavors + ' sabores' : 'Escolha o sabor';
     }
   }
 
@@ -680,7 +696,8 @@
     }
     const category = getCategory(product);
     const variant = selectedVariant();
-    if (productFlavorIds(product, category).length > 0 && state.product.flavorIds.length === 0) {
+    const minFlavors = flavorMinimum(product, category);
+    if (productFlavorIds(product, category).length > 0 && state.product.flavorIds.length < minFlavors) {
       return;
     }
     if (!variant) {
